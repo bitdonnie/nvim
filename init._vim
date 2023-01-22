@@ -1,0 +1,215 @@
+" Fish doesn't play well with others
+set shell=/usr/bin/fish
+
+" ==================================== 
+" # START Plugins
+" ====================================
+
+lua require('plugins')
+lua require("mason").setup()
+
+call plug#begin()
+
+" GUI enhancements
+Plug 'itchyny/lightline.vim'
+Plug 'chriskempson/base16-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+"  - Statusline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+
+Plug 'dense-analysis/ale'
+
+" -- Fish shell
+Plug 'dag/vim-fish'
+
+" -- LaTeX
+Plug 'lervag/vimtex'
+
+" -- Fuzzy finder
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Only load for markdown
+Plug 'godlygeek/tabular', { 'for': ['markdown'] }
+Plug 'plasticboy/vim-markdown', { 'for': ['markdown'] }
+
+
+call plug#end()
+
+" ==================================== 
+" # END Plugins
+" ====================================
+
+set clipboard+=unnamedplus
+" Use the filtype plugin to specify file type specific configurations
+filetype plugin indent on
+
+" Color schemes
+set termguicolors
+set background=dark
+let base16colorspace=256
+
+colorscheme base16-gruvbox-dark-soft
+syntax on
+" Brighter comments
+call Base16hi("Comment", g:base16_gui09, "", g:base16_cterm09, "", "", "")
+
+" Lightline
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'filename': 'LightlineFilename',
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
+
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Format
+nmap <silent> gfmt <Plug>(coc-format)
+
+
+" ====================================
+" # START Keyboard shortcuts
+" ====================================
+
+" ; as :
+nnoremap ; :
+
+" use Ctrl+k for Esc
+nnoremap <C-k> <Esc>
+inoremap <C-k> <Esc>
+vnoremap <C-k> <Esc>
+snoremap <C-k> <Esc>
+xnoremap <C-k> <Esc>
+cnoremap <C-k> <C-c>
+onoremap <C-k> <Esc>
+lnoremap <C-k> <Esc>
+tnoremap <C-k> <Esc>
+
+" No arrow keys --- force yourself to gain productivity
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+
+" ====================================
+" # END Keyboard shortcuts
+" ====================================
+
+" ====================================
+" # START CoC Settings
+" ====================================
+
+let g:coc_global_extensions = [
+			\'coc-tsserver',
+			\'coc-rust-analyzer'
+			\]
+
+
+" ====================================
+" # END CoC Settings
+" ====================================
+
+
+" ====================================
+" # START GUI Settings
+" ====================================
+
+set background=dark
+set guioptions-=T " Remove toolbar
+set backspace=2 " Backspace over newlines
+set relativenumber " Relative line numbers
+set number " Also show current absolute line
+set colorcolumn=80 " and give me a colored column
+set mouse=a " Enable mouse usage (all modes) in terminals
+
+" ====================================
+" # END GUI Settings
+" ====================================
+
+" ====================================
+" # START PLUGIN Settings
+" ====================================
+
+" vimtex
+let g:tex_flavor  = 'latex'
+let g:tex_conceal = ''
+let g:vimtex_fold_manual = 1
+let g:vimtex_compiler_engine = 'lualatex'
+" use SumatraPDF if you are on Windows
+let g:vimtex_view_method = 'zathura'
+
+if empty(v:servername) && exists('*remote_startserver')
+  call remote_startserver('VIM')
+endif
+
+" HIMALAYA
+set hidden
+
+" Use Fuzzy finder
+let g:himalaya_mailbox_picker = 'fzf'
