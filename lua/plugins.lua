@@ -31,5 +31,10 @@ return require('packer').startup(function()
 
     -- Debugging
     use 'mfussenegger/nvim-dap'
+    
+    -- Telescope
+    use 'nvim-lua/popup.nvim' -- Poup for telescope
+    use 'nvim-telescope/telescope.nvim' -- Fuzzy finder
+    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- Make telescope faster
 
 end)
