@@ -18,6 +18,8 @@ vim.keymap.set('i', '<C-k>', '<Esc>')
 opt.syntax = "ON" -- str:  Allow syntax highlighting
 opt.termguicolors = true -- bool: If term supports ui color then enable
 
+-- Format on Save
+vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()]]
 
 --Set completeopt to have a better completion experience
 -- :help completeopt
