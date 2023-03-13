@@ -1,6 +1,7 @@
 
 require('plugins') -- Plugins 
 require('opts') -- Options
+require('keys') -- Keymaps
 
 -- Color theme
 require('kanagawa').setup({
@@ -8,7 +9,10 @@ require('kanagawa').setup({
 })
 vim.cmd("colorscheme kanagawa")
 
+-- Crates Nvim
+require('crates').setup({
 
+})
 ----------------------------------------
 -- LSP Server Configurations        ----
 ----------------------------------------

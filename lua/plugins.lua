@@ -8,6 +8,7 @@ return require('packer').startup(function()
 
     use 'neovim/nvim-lspconfig' 
     use 'simrat39/rust-tools.nvim'
+    use 'saecki/crates.nvim' -- Help managing crates dependencies
 
     -- Completion framework:
     use 'hrsh7th/nvim-cmp' 
@@ -36,5 +37,10 @@ return require('packer').startup(function()
     use 'nvim-lua/popup.nvim' -- Poup for telescope
     use 'nvim-telescope/telescope.nvim' -- Fuzzy finder
     use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- Make telescope faster
+    use {
+      'saecki/crates.nvim',
+      tag = 'v0.3.0',
+      requires = { 'nvim-lua/plenary.nvim' },
+    }
 
 end)
